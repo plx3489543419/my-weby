@@ -1,0 +1,1710 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>阳台风景背景</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            min-height: 100vh;
+            background-image: url('d31676867063b01290c8d278c2fcd95.jpg');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            background-attachment: fixed;
+            position: relative;
+            overflow: hidden;
+            transition: background-image 0.8s ease;
+        }
+        
+        .scene2 {
+            background-image: url('changjing2.jpg');
+        }
+
+        .scene3 {
+            background-image: url('changjing3.jpg');
+        }
+        
+        .girl-container {
+            position: absolute;
+            top: 17.5%;
+            right: 39%;
+            width: 543px;
+            height: auto;
+            filter: drop-shadow(4px 6px 10px rgba(0, 0, 0, 0.35));
+            z-index: 10;
+            transition: all 1s ease;
+        }
+        
+        .girl-container.fade-out {
+            opacity: 0;
+            transform: scale(0.6);
+        }
+        
+        .girl-container.walk {
+            top: 50%;
+            right: 10%;
+            transform: scale(0.8);
+        }
+        
+        .girl {
+            width: 100%;
+            height: auto;
+            image-rendering: -webkit-optimize-contrast;
+            transition: transform 0.1s ease;
+        }
+        
+        .girl.walk-anim {
+            animation: walk 0.3s ease-in-out infinite;
+        }
+        
+        .speech-bubble {
+            position: absolute;
+            top: 30.42%;
+            right: 30%;
+            background: white;
+            border-radius: 16px;
+            padding: 16px 24px;
+            max-width: 300px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+            z-index: 20;
+            animation: fadeIn 0.5s ease-out;
+            transition: opacity 0.3s ease;
+        }
+        
+        .speech-bubble::after {
+            content: '';
+            position: absolute;
+            bottom: -24px;
+            left: 50%;
+            transform: translateX(-50%);
+            border: 12px solid transparent;
+            border-top-color: white;
+        }
+        
+        .speech-bubble p {
+            font-family: 'Microsoft YaHei', sans-serif;
+            font-size: 16px;
+            color: #333;
+            line-height: 1.6;
+            margin: 0;
+        }
+        
+        .start-button {
+            position: absolute;
+            top: 38%;
+            right: 35%;
+            transform: translateX(-50%);
+            width: 120px;
+            height: auto;
+            cursor: pointer;
+            z-index: 20;
+            transition: transform 0.2s ease, opacity 0.3s ease;
+            animation: fadeIn 0.5s ease-out 0.3s both;
+        }
+        
+        .start-button:hover {
+            transform: translateX(-50%) scale(1.05);
+        }
+        
+        .start-button:active {
+            transform: translateX(-50%) scale(0.95);
+        }
+        
+        .start-button img {
+            width: 100%;
+            height: auto;
+        }
+        
+        .hidden {
+            opacity: 0;
+            pointer-events: none;
+        }
+        
+        .hidden-final {
+            display: none;
+        }
+        
+        /* 水体覆盖层 */
+        .water-overlay {
+            position: absolute;
+            /* 调整这些值来匹配水缸的位置 */
+            top: 60%;
+            left: 20%;
+            width: 35%;
+            height: 25%;
+            background: rgba(100, 180, 220, 0.1);
+            backdrop-filter: blur(1px);
+            -webkit-backdrop-filter: blur(1px);
+            opacity: 0.85;
+            z-index: 5;
+            border-radius: 50%;
+            display: none;
+            pointer-events: none;
+        }
+        
+        .scene2 .water-overlay {
+            display: block;
+            animation: waterRipple 3s ease-in-out infinite;
+        }
+        
+        @keyframes waterRipple {
+            0%, 100% {
+                transform: scale(1);
+            }
+            50% {
+                transform: scale(1.02);
+            }
+        }
+        
+        /* 返回按钮 */
+        .back-button {
+            position: absolute;
+            top: -50px;
+            left: 0%;
+            width: 180px;
+            height: auto;
+            cursor: pointer;
+            z-index: 25;
+            display: none;
+            transition: transform 0.2s ease;
+        }
+        
+        .back-button:hover {
+            transform: scale(1.1);
+        }
+        
+        .back-button:active {
+            transform: scale(0.95);
+        }
+        
+        .back-button img {
+            width: 100%;
+            height: auto;
+        }
+        
+        .scene2 .back-button {
+            display: block;
+            animation: fadeIn 0.5s ease-out;
+        }
+        
+        /* 场景2提示对话框 */
+        .scene2-dialog {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: white;
+            border-radius: 16px;
+            padding: 20px 32px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+            z-index: 24;
+            display: none;
+            animation: fadeIn 0.5s ease-out 0.5s both;
+            cursor: pointer;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+        
+        .scene2-dialog:hover {
+            transform: translate(-50%, -50%) scale(1.05);
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.25);
+        }
+        
+        .scene2-dialog p {
+            font-family: 'Microsoft YaHei', sans-serif;
+            font-size: 18px;
+            color: #333;
+            line-height: 1.6;
+            margin: 0;
+            text-align: center;
+        }
+        
+        .scene2 .scene2-dialog {
+            display: block;
+        }
+        
+        .scene2 .scene2-dialog.hidden-final {
+            display: none;
+        }
+        
+        /* 脏衣娄点击区域 */
+        .laundry-area {
+            position: absolute;
+            bottom: 10%;
+            right: 5%;
+            width: 30%;
+            height: 40%;
+            cursor: pointer;
+            z-index: 22;
+            display: none;
+            pointer-events: none;
+        }
+        
+        .scene2 .laundry-area {
+            display: block;
+            pointer-events: none;
+        }
+        
+        .laundry-area.clickable {
+            pointer-events: auto;
+        }
+        
+        /* lou图片 */
+        .lou-image {
+            position: absolute;
+            bottom: 10%;
+            right: 5%;
+            width: 30%;
+            height: auto;
+            z-index: 23;
+            display: none;
+            animation: fadeIn 0.5s ease-out;
+        }
+        
+        .lou-image.show {
+            display: block;
+        }
+        
+        .lou-image.clickable {
+            cursor: pointer;
+        }
+        
+        .lou-image.clickable:hover {
+            transform: scale(1.05);
+            transition: transform 0.2s ease;
+        }
+        
+        /* zang图片 */
+        .zang-image {
+            position: absolute;
+            bottom: 25%;
+            right: 12%;
+            width: 20%;
+            height: auto;
+            z-index: 26;
+            opacity: 0;
+            transform: scale(0.4);
+            pointer-events: none;
+        }
+        
+        .zang-image.animate {
+            animation: throwToPool 1s ease-in forwards;
+        }
+        
+        @keyframes throwToPool {
+            0% {
+                opacity: 1;
+                transform: scale(0.4) translate(0, 0);
+            }
+            25% {
+                opacity: 1;
+                transform: scale(0.6) translate(-60%, -40%);
+            }
+            50% {
+                opacity: 1;
+                transform: scale(1) translate(-120%, -70%);
+            }
+            75% {
+                opacity: 1;
+                transform: scale(1.2) translate(-180%, -50%);
+            }
+            100% {
+                opacity: 0;
+                transform: scale(0.8) translate(-230%, -20%);
+            }
+        }
+        
+        /* dier图片 */
+        .dier-image {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 30%;
+            height: auto;
+            transform: translate(-50%, -50%) scale(0);
+            z-index: 27;
+            opacity: 0;
+            pointer-events: none;
+        }
+        
+        /* yuan图片 */
+        .yuan-image {
+            position: absolute;
+            top: 60%;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 30%;
+            height: auto;
+            z-index: 27;
+            display: none;
+        }
+        
+        .scene2 .yuan-image.show {
+            display: block;
+        }
+        
+        /* yuan1图片 */
+        .yuan1-image {
+            position: absolute;
+            top: 65%;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 25%;
+            height: auto;
+            z-index: 27;
+            display: none;
+        }
+        
+        .scene2 .yuan1-image.show {
+            display: block;
+        }
+
+        /* 计算公式容器 */
+        .formula-container {
+            position: absolute;
+            top: 80%;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            z-index: 30;
+            display: none;
+        }
+
+        .scene2 .formula-container.show {
+            display: flex;
+        }
+
+        /* 输入框样式 */
+        .slot-image {
+            width: 60px;
+            height: auto;
+        }
+
+        /* 符号样式 */
+        .formula-image {
+            width: 40px;
+            height: auto;
+        }
+
+        /* 合成按钮样式 */
+        .btn-hecheng-image {
+            width: 80px;
+            height: auto;
+            cursor: pointer;
+            transition: transform 0.2s ease;
+        }
+
+        .btn-hecheng-image:hover {
+            transform: scale(1.05);
+        }
+
+        .btn-hecheng-image:active {
+            transform: scale(0.95);
+        }
+
+        /* shouce1图片 */
+        .shouce1-image {
+            position: absolute;
+            top: 180px;
+            left: 0%;
+            width: 12%;
+            height: auto;
+            z-index: 28;
+            cursor: pointer;
+            transition: transform 0.3s ease;
+            display: none;
+        }
+
+        .scene2 .shouce1-image.show {
+            display: block;
+        }
+
+        .shouce1-image.expanded {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 60%;
+            height: auto;
+            z-index: 999;
+        }
+
+        /* 轨道元素基础样式 */
+        .orbital-element {
+            position: absolute;
+            width: 30px;
+            height: auto;
+            z-index: 25;
+            pointer-events: none;
+            transition: opacity 0.1s ease;
+        }
+
+        .orbital-element.hidden {
+            opacity: 0;
+        }
+
+        /* 素材元素样式 */
+        .raw-element {
+            position: absolute;
+            width: 65px;
+            height: 65px;
+            object-fit: contain;
+            z-index: 99;
+            pointer-events: auto;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .raw-element.hidden {
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        .raw-element.filled {
+            display: none;
+            pointer-events: none;
+        }
+
+        .scene2 .raw-element.show {
+            display: block;
+        }
+
+        /* 合成按钮禁用状态 */
+        .btn-hecheng-image.disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            filter: grayscale(50%);
+        }
+
+        /* 提示图片样式 */
+        .tip-image {
+            position: absolute;
+            top: 40%;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 20%;
+            height: auto;
+            z-index: 101;
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        .tip-image.show {
+            animation: tipAppear 0.5s ease-out forwards;
+        }
+
+        .tip-image.hide {
+            animation: tipDisappear 0.5s ease-out forwards;
+        }
+
+        @keyframes tipAppear {
+            0% {
+                opacity: 0;
+                transform: translateX(-50%) translateY(-20px);
+            }
+            100% {
+                opacity: 1;
+                transform: translateX(-50%) translateY(0);
+            }
+        }
+
+        @keyframes tipDisappear {
+            0% {
+                opacity: 1;
+                transform: translateX(-50%) translateY(0);
+            }
+            100% {
+                opacity: 0;
+                transform: translateX(-50%) translateY(-20px);
+            }
+        }
+
+        /* 视频容器样式 */
+        .video-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background-color: rgba(0, 0, 0, 0.95);
+            z-index: 999;
+            display: none;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .video-container.show {
+            display: flex;
+            animation: fadeIn 0.3s ease-out;
+        }
+
+        .result-video {
+            width: 100vw;
+            height: 100vh;
+            object-fit: contain;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
+            }
+        }
+
+        /* 场景3的disan图片样式 */
+        .disan-image {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 30%;
+            height: auto;
+            z-index: 1000;
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        .disan-image.show {
+            opacity: 1;
+            animation: shake 0.5s ease-in-out 4;
+        }
+
+        .disan-image.hide {
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        @keyframes shake {
+            0%, 100% {
+                transform: translate(-50%, -50%) rotate(0deg);
+            }
+            25% {
+                transform: translate(-50%, -50%) rotate(-10deg);
+            }
+            75% {
+                transform: translate(-50%, -50%) rotate(10deg);
+            }
+        }
+
+        /* 场景3的xiaomie图片样式 */
+        .xiaomie-image {
+            position: absolute;
+            top: 40%;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 20%;
+            height: auto;
+            z-index: 902;
+            opacity: 0;
+            pointer-events: none;
+            cursor: pointer;
+            transition: opacity 0.3s ease;
+        }
+
+        .xiaomie-image.show {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        /* 场景3的合成按钮样式 */
+        .btn-hecheng-scene3 {
+            position: absolute;
+            top: 55%;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 15%;
+            height: auto;
+            z-index: 901;
+            opacity: 0;
+            pointer-events: none;
+            cursor: pointer;
+        }
+
+        .btn-hecheng-scene3.show {
+            opacity: 1;
+            pointer-events: auto !important;
+            display: block !important;
+            visibility: visible !important;
+        }
+
+        /* 场景3的qunzi图片样式 */
+        .qunzi-image {
+            position: absolute;
+            top: 30%;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 25%;
+            height: auto;
+            z-index: 900;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.5s ease;
+        }
+
+        .qunzi-image.show {
+            opacity: 1;
+            pointer-events: auto;
+            animation: qunziAppear 0.5s ease-out;
+        }
+
+        /* 细菌图片样式 */
+        .jun-image {
+            position: absolute;
+            width: 8%;
+            height: auto;
+            z-index: 905;
+            opacity: 0;
+            pointer-events: none;
+            cursor: pointer;
+            transition: opacity 0.5s ease, transform 0.3s ease;
+        }
+
+        .jun-image.show {
+            opacity: 1;
+            pointer-events: auto;
+            animation: junAppear 0.3s ease-out;
+        }
+
+        .jun-image.hide {
+            opacity: 0;
+            animation: junDisappear 0.2s ease-out;
+        }
+
+        .jun-image:hover {
+            transform: scale(1.1);
+        }
+
+        @keyframes junAppear {
+            0% {
+                opacity: 0;
+                transform: scale(0.5);
+            }
+            100% {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+
+        @keyframes junDisappear {
+            0% {
+                opacity: 1;
+                transform: scale(1);
+            }
+            100% {
+                opacity: 0;
+                transform: scale(0.3);
+            }
+        }
+
+        /* 通关效果图片样式 */
+        .gj-image {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%) scale(0);
+            width: 50%;
+            height: auto;
+            z-index: 1000;
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        .gj-image.show {
+            animation: gjAppear 0.8s ease-out forwards;
+        }
+
+        @keyframes gjAppear {
+            0% {
+                opacity: 0;
+                transform: translate(-50%, -50%) scale(0);
+            }
+            50% {
+                opacity: 1;
+                transform: translate(-50%, -50%) scale(1.2);
+            }
+            100% {
+                opacity: 1;
+                transform: translate(-50%, -50%) scale(1);
+            }
+        }
+
+        @keyframes qunziAppear {
+            0% {
+                opacity: 0;
+                transform: translateX(-50%) translateY(-20px);
+            }
+            100% {
+                opacity: 1;
+                transform: translateX(-50%) translateY(0);
+            }
+        }
+
+        /* shouce2图片 */
+        .shouce2-image {
+            position: absolute;
+            top: 280px;
+            left: 0%;
+            width: 12%;
+            height: auto;
+            z-index: 28;
+            cursor: pointer;
+            transition: transform 0.3s ease;
+            display: none;
+        }
+        
+        .scene2 .shouce2-image.show {
+            display: block;
+        }
+        
+        .shouce2-image.expanded {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 60%;
+            height: auto;
+            z-index: 999;
+        }
+        
+        .dier-image.show {
+            animation: dierAppear 2s ease-out forwards;
+        }
+        
+        @keyframes dierAppear {
+            0% {
+                opacity: 0;
+                transform: translate(-50%, -50%) scale(0);
+            }
+            20% {
+                opacity: 1;
+                transform: translate(-50%, -50%) scale(1.5);
+            }
+            30% {
+                transform: translate(-50%, -50%) scale(1.2);
+            }
+            40% {
+                transform: translate(-50%, -50%) scale(1.2) rotate(-5deg);
+            }
+            50% {
+                transform: translate(-50%, -50%) scale(1.2) rotate(5deg);
+            }
+            60% {
+                transform: translate(-50%, -50%) scale(1.2) rotate(-5deg);
+            }
+            70% {
+                transform: translate(-50%, -50%) scale(1.2) rotate(5deg);
+            }
+            80% {
+                transform: translate(-50%, -50%) scale(1.2) rotate(0deg);
+            }
+            90% {
+                opacity: 1;
+            }
+            100% {
+                opacity: 0;
+                transform: translate(-50%, -50%) scale(0.8);
+            }
+        }
+        
+        @media (min-width: 1200px) {
+            .back-button {
+                width: 220px;
+                top: -50px;
+                left: 0%;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .back-button {
+                width: 120px;
+                top: -50px;
+                left: 0%;
+            }
+        }
+        
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        @keyframes walk {
+            0%, 100% {
+                transform: rotate(-2deg);
+            }
+            50% {
+                transform: rotate(2deg);
+            }
+        }
+        
+        @media (min-width: 1200px) {
+            .girl-container {
+                width: 600px;
+                top: 15.4%;
+                right: 41.6%;
+            }
+            
+            .girl-container.walk {
+                top: 45%;
+                right: 8%;
+            }
+            
+            .speech-bubble {
+                top: 25.35%;
+                right: 32%;
+                max-width: 350px;
+                padding: 20px 28px;
+            }
+            
+            .speech-bubble p {
+                font-size: 18px;
+            }
+            
+            .start-button {
+                top: 33%;
+                right: 37%;
+                width: 150px;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .girl-container {
+                width: 400px;
+                top: 19.6%;
+                right: 32.5%;
+            }
+            
+            .girl-container.walk {
+                top: 55%;
+                right: 15%;
+            }
+            
+            .speech-bubble {
+                top: 33.8%;
+                right: 25%;
+                max-width: 220px;
+                padding: 12px 18px;
+            }
+            
+            .speech-bubble p {
+                font-size: 14px;
+            }
+            
+            .start-button {
+                top: 41%;
+                right: 30%;
+                width: 90px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="speech-bubble" id="speechBubble">
+        <p>我出去玩不小心摔了一跤，能帮我洗洗衣服吗？</p>
+    </div>
+    <div class="start-button" id="startButton">
+        <img src="kaishi.png" alt="开始">
+    </div>
+    <div class="girl-container" id="girlContainer">
+        <img src="chushi.png" alt="小女孩" class="girl" id="girl">
+    </div>
+    <div class="water-overlay" id="waterOverlay"></div>
+    <div class="back-button" id="backButton">
+        <img src="fanhui.png" alt="返回">
+    </div>
+    <div class="scene2-dialog" id="scene2Dialog">
+        <p>点击脏衣娄投放衣物</p>
+    </div>
+    <div class="laundry-area" id="laundryArea"></div>
+    <img src="lou.png" alt="脏衣娄" class="lou-image" id="louImage">
+    <img src="zang1.png" alt="脏衣1" class="zang-image" id="zang1">
+    <img src="zang2.png" alt="脏衣2" class="zang-image" id="zang2">
+    <img src="zang3.png" alt="脏衣3" class="zang-image" id="zang3">
+    <img src="zang4.png" alt="脏衣4" class="zang-image" id="zang4">
+    <img src="dier.png" alt="第二阶段" class="dier-image" id="dier">
+    <img src="yuan.png" alt="圆圈" class="yuan-image" id="yuan">
+    <img src="yuan1.png" alt="圆圈1" class="yuan1-image" id="yuan1">
+
+    <!-- 轨道素材元素 -->
+    <img src="raw_baiyuanwei.png" alt="白鸢尾" class="raw-element" id="raw_baiyuanwei">
+    <img src="raw_qiangwei.png" alt="蔷薇" class="raw-element" id="raw_qiangwei">
+    <img src="raw_xunyicao.png" alt="薰衣草" class="raw-element" id="raw_xunyicao">
+    <img src="raw_bailanhua.png" alt="百兰花" class="raw-element" id="raw_bailanhua">
+    <img src="raw_yilanyilan.png" alt="伊兰伊兰" class="raw-element" id="raw_yilanyilan">
+    <img src="raw_yeru.png" alt="耶蓉" class="raw-element" id="raw_yeru">
+    <img src="raw_baidingxiang.png" alt="白丁香" class="raw-element" id="raw_baidingxiang">
+    <img src="raw_fenglingcao.png" alt="风铃草" class="raw-element" id="raw_fenglingcao">
+    <img src="raw_foshougan.png" alt="佛手柑" class="raw-element" id="raw_foshougan">
+    <img src="raw_xiangwanyu.png" alt="香碗豆" class="raw-element" id="raw_xiangwanyu">
+    <img src="raw_tanmu.png" alt="檀木" class="raw-element" id="raw_tanmu">
+
+    <div class="formula-container" id="formulaContainer">
+        <img src="slot1.png" alt="槽位1" class="slot-image" id="slot1">
+        <img src="jia.png" alt="加号" class="formula-image">
+        <img src="slot2.png" alt="槽位2" class="slot-image" id="slot2">
+        <img src="jia.png" alt="加号" class="formula-image">
+        <img src="slot3.png" alt="槽位3" class="slot-image" id="slot3">
+        <img src="dengyu.png" alt="等于" class="formula-image">
+        <img src="btn_hecheng.png" alt="合成按钮" class="btn-hecheng-image" id="btnHecheng">
+    </div>
+    <img src="shouce1.png" alt="手册1" class="shouce1-image" id="shouce1">
+    <img src="shouce2.png" alt="手册2" class="shouce2-image" id="shouce2">
+
+    <!-- 提示图片 -->
+    <img src="tip_success.png" alt="成功提示" class="tip-image" id="tipSuccess">
+    <img src="tip_fail.png" alt="失败提示" class="tip-image" id="tipFail">
+
+    <!-- 视频容器 -->
+    <div class="video-container" id="videoContainer">
+        <video id="resultVideo" class="result-video" autoplay onended="videoEnded()">
+            <source src="" type="video/mp4">
+        </video>
+    </div>
+
+    <!-- 场景3的disan图片 -->
+    <img src="disan.png" alt="disan" class="disan-image" id="disan">
+
+    <!-- 场景3的xiaomie图片 -->
+    <img src="xiaomie.png" alt="xiaomie" class="xiaomie-image" id="xiaomie">
+
+    <!-- 场景3的合成按钮 -->
+    <img src="btn_hecheng.png" alt="合成按钮" class="btn-hecheng-scene3" id="btnHechengScene3">
+
+    <!-- 场景3的qunzi图片 -->
+    <img src="qunzi.png" alt="qunzi" class="qunzi-image" id="qunzi">
+
+    <!-- 细菌图片 -->
+    <img src="jun1.png" alt="jun1" class="jun-image" id="jun1">
+    <img src="jun2.png" alt="jun2" class="jun-image" id="jun2">
+    <img src="jun3.png" alt="jun3" class="jun-image" id="jun3">
+
+    <!-- 通关效果图片 -->
+    <img src="gj.png" alt="通关" class="gj-image" id="gj">
+
+    <script>
+        const startButton = document.getElementById('startButton');
+        const speechBubble = document.getElementById('speechBubble');
+        const girlContainer = document.getElementById('girlContainer');
+        const girl = document.getElementById('girl');
+        const body = document.body;
+        const backButton = document.getElementById('backButton');
+        const scene2Dialog = document.getElementById('scene2Dialog');
+        const laundryArea = document.getElementById('laundryArea');
+        const louImage = document.getElementById('louImage');
+        const zang1 = document.getElementById('zang1');
+        const zang2 = document.getElementById('zang2');
+        const zang3 = document.getElementById('zang3');
+        const zang4 = document.getElementById('zang4');
+        const dier = document.getElementById('dier');
+        const yuan = document.getElementById('yuan');
+        const yuan1 = document.getElementById('yuan1');
+        const shouce1 = document.getElementById('shouce1');
+        const shouce2 = document.getElementById('shouce2');
+        const formulaContainer = document.getElementById('formulaContainer');
+        const slot1 = document.getElementById('slot1');
+        const slot2 = document.getElementById('slot2');
+        const slot3 = document.getElementById('slot3');
+        const btnHecheng = document.getElementById('btnHecheng');
+        const tipSuccess = document.getElementById('tipSuccess');
+        const tipFail = document.getElementById('tipFail');
+        const videoContainer = document.getElementById('videoContainer');
+        const resultVideo = document.getElementById('resultVideo');
+        const disan = document.getElementById('disan');
+        const xiaomie = document.getElementById('xiaomie');
+        const btnHechengScene3 = document.getElementById('btnHechengScene3');
+        const qunzi = document.getElementById('qunzi');
+        
+        // 细菌元素
+        const jun1 = document.getElementById('jun1');
+        const jun2 = document.getElementById('jun2');
+        const jun3 = document.getElementById('jun3');
+        const junImages = [jun1, jun2, jun3];
+        
+        // 通关效果图片
+        const gj = document.getElementById('gj');
+
+        // 细菌游戏状态
+        let junClickCount = 0;
+        const JUN_TARGET = 6;
+        let junGameRunning = false;
+        let junSpawnInterval = null;
+
+        // 合成系统状态
+        let filledSlots = []; // 存储已填充的原料ID
+        let slotImages = [slot1, slot2, slot3]; // 槽位图片元素
+
+        // 配方定义（顺序固定）- 映射到视频文件名
+        const recipes = {
+            'raw_foshougan+raw_qiangwei+raw_tanmu': 'scene_4',      // res_huayang -> scene_4
+            'raw_baiyuanwei+raw_xiangwanyu+raw_tanmu': 'scene_5',   // res_tanmu -> scene_5
+            'raw_baiyuanwei+raw_qiangwei+raw_xunyicao': 'scene_1',  // res_zhicui -> scene_1
+            'raw_bailanhua+raw_yilanyilan+raw_yeru': 'scene_2',     // res_yenai1 -> scene_2
+            'raw_baidingxiang+raw_fenglingcao+raw_yeru': 'scene_3'  // res_yenai2 -> scene_3
+        };
+
+        // 初始化合成按钮为禁用状态
+        btnHecheng.classList.add('disabled');
+
+        // 点击计数器
+        let clickCount = 0;
+
+        startButton.addEventListener('click', function() {
+            // 立即隐藏对话框和开始按钮（快速消失）
+            speechBubble.classList.add('hidden');
+            startButton.classList.add('hidden');
+            
+            // 立即完全移除按钮和对话框
+            setTimeout(function() {
+                speechBubble.classList.add('hidden-final');
+                startButton.classList.add('hidden-final');
+            }, 100);
+            
+            // 小女孩开始走路动画
+            girl.classList.add('walk-anim');
+            girlContainer.classList.add('walk');
+            
+            // 小女孩走到位置后开始淡出
+            setTimeout(function() {
+                // 停止走路动画
+                girl.classList.remove('walk-anim');
+                // 小女孩淡出
+                girlContainer.classList.add('fade-out');
+                
+                // 等小女孩完全消失后切换场景
+                setTimeout(function() {
+                    girlContainer.classList.add('hidden-final');
+                    body.classList.add('scene2');
+                }, 300);
+            }, 1000);
+        });
+        
+        backButton.addEventListener('click', function() {
+            // 返回场景1
+            body.classList.remove('scene2');
+
+            // 重置所有元素
+            setTimeout(function() {
+                speechBubble.classList.remove('hidden', 'hidden-final');
+                startButton.classList.remove('hidden', 'hidden-final');
+                girlContainer.classList.remove('hidden', 'hidden-final', 'walk', 'fade-out');
+                scene2Dialog.classList.remove('hidden', 'hidden-final');
+                louImage.classList.remove('show', 'clickable');
+                laundryArea.classList.remove('clickable');
+                zang1.classList.remove('animate');
+                zang2.classList.remove('animate');
+                zang3.classList.remove('animate');
+                zang4.classList.remove('animate');
+                dier.classList.remove('show');
+                yuan.classList.remove('show');
+                yuan1.classList.remove('show');
+                shouce1.classList.remove('show', 'expanded');
+                shouce2.classList.remove('show', 'expanded');
+                formulaContainer.classList.remove('show');
+                stopOrbitalAnimations(); // 停止轨道动画
+                clickCount = 0;
+
+                // 重置合成系统状态
+                resetSynthesisState();
+            }, 300);
+        });
+        
+        // shouce1图片点击事件
+        shouce1.addEventListener('click', function() {
+            if (shouce1.classList.contains('expanded')) {
+                // 再次点击，缩小至更靠下的位置，隐藏shouce2
+                shouce1.classList.remove('expanded');
+                shouce1.style.top = '200px';
+                shouce2.classList.remove('show', 'expanded');
+            } else {
+                // 第一次点击，放大并显示shouce2，清除内联样式让CSS居中生效
+                shouce1.style.top = '';
+                shouce1.classList.add('expanded');
+                shouce2.classList.add('show');
+            }
+        });
+        
+        // shouce2图片点击事件
+        shouce2.addEventListener('click', function() {
+            shouce2.classList.toggle('expanded');
+        });
+        
+        // 脏衣娄点击事件
+        laundryArea.addEventListener('click', function() {
+            // 隐藏提示对话框
+            scene2Dialog.classList.add('hidden');
+            
+            // 显示lou.png
+            louImage.classList.add('show');
+            louImage.classList.add('clickable');
+            laundryArea.classList.add('clickable');
+            
+            // 完全隐藏对话框
+            setTimeout(function() {
+                scene2Dialog.classList.add('hidden-final');
+            }, 300);
+        });
+        
+        // 对话框点击事件
+        scene2Dialog.addEventListener('click', function() {
+            // 隐藏提示对话框
+            scene2Dialog.classList.add('hidden');
+            
+            // 显示lou.png
+            louImage.classList.add('show');
+            louImage.classList.add('clickable');
+            laundryArea.classList.add('clickable');
+            
+            // 完全隐藏对话框
+            setTimeout(function() {
+                scene2Dialog.classList.add('hidden-final');
+            }, 300);
+        });
+        
+        // lou图片点击事件
+        louImage.addEventListener('click', function() {
+            // 如果已经点击了4次，不做任何事
+            if (clickCount >= 4) return;
+            
+            clickCount++;
+            
+            // 显示对应的zang图片
+            let currentZang;
+            if (clickCount === 1) currentZang = zang1;
+            else if (clickCount === 2) currentZang = zang2;
+            else if (clickCount === 3) currentZang = zang3;
+            else if (clickCount === 4) currentZang = zang4;
+            
+            if (currentZang) {
+                // 先重置动画
+                currentZang.classList.remove('animate');
+                void currentZang.offsetWidth; // 触发重排
+                
+                // 添加动画
+                currentZang.classList.add('animate');
+                
+                // 1秒后清理动画类
+                setTimeout(function() {
+                    currentZang.classList.remove('animate');
+                }, 1000);
+            }
+            
+            // 第四次点击后，隐藏lou.png并显示dier.png
+            if (clickCount === 4) {
+                setTimeout(function() {
+                    louImage.classList.remove('show');
+                    louImage.classList.remove('clickable');
+                    
+                    // 显示dier.png
+                    dier.classList.remove('show');
+                    void dier.offsetWidth; // 触发重排
+                    dier.classList.add('show');
+                    
+                    // 2秒后显示yuan.png、yuan1.png和shouce1.png
+                    setTimeout(function() {
+                        dier.classList.remove('show');
+                        yuan.classList.add('show');
+                        yuan1.classList.add('show');
+                        shouce1.classList.add('show');
+                        formulaContainer.classList.add('show');
+
+                        // 显示并启动所有轨道素材动画
+                        startOrbitalAnimations();
+                    }, 2000);
+                }, 1000);
+            }
+        });
+
+        // 轨道动画相关变量
+        const rawElements = [
+            { el: document.getElementById('raw_baiyuanwei'), angleOffset: 0, id: 'raw_baiyuanwei' },
+            { el: document.getElementById('raw_qiangwei'), angleOffset: 32.7, id: 'raw_qiangwei' },
+            { el: document.getElementById('raw_xunyicao'), angleOffset: 65.4, id: 'raw_xunyicao' },
+            { el: document.getElementById('raw_bailanhua'), angleOffset: 98.1, id: 'raw_bailanhua' },
+            { el: document.getElementById('raw_yilanyilan'), angleOffset: 130.8, id: 'raw_yilanyilan' },
+            { el: document.getElementById('raw_yeru'), angleOffset: 163.5, id: 'raw_yeru' },
+            { el: document.getElementById('raw_baidingxiang'), angleOffset: 196.2, id: 'raw_baidingxiang' },
+            { el: document.getElementById('raw_fenglingcao'), angleOffset: 228.9, id: 'raw_fenglingcao' },
+            { el: document.getElementById('raw_foshougan'), angleOffset: 261.6, id: 'raw_foshougan' },
+            { el: document.getElementById('raw_xiangwanyu'), angleOffset: 294.3, id: 'raw_xiangwanyu' },
+            { el: document.getElementById('raw_tanmu'), angleOffset: 327, id: 'raw_tanmu' }
+        ];
+
+        let animationRunning = false;
+        let animationStartTime = 0;
+        const orbitPeriod = 20000; // 20秒周期（更慢速移动）
+        const respawnDelay = 2000; // 2秒后重生
+
+        function startOrbitalAnimations() {
+            // 显示所有素材
+            rawElements.forEach(item => {
+                item.el.classList.add('show');
+                item.el.classList.remove('hidden', 'filled');
+                item.el.style.opacity = '1';
+            });
+
+            if (!animationRunning) {
+                animationRunning = true;
+                animationStartTime = performance.now();
+                requestAnimationFrame(updateOrbitalPositions);
+            }
+        }
+
+        function stopOrbitalAnimations() {
+            animationRunning = false;
+            rawElements.forEach(item => {
+                item.el.classList.remove('show', 'hidden', 'filled');
+            });
+        }
+
+        function updateOrbitalPositions(timestamp) {
+            if (!animationRunning) return;
+
+            // 获取yuan1元素的位置和尺寸（作为轨道容器）
+            const yuan1Rect = yuan1.getBoundingClientRect();
+
+            // 计算椭圆轨道参数（基于yuan1的尺寸，在内部循环）
+            const orbitWidth = yuan1Rect.width * 0.7; // 椭圆宽度（yuan1内部，更小）
+            const orbitHeight = yuan1Rect.height * 0.7; // 椭圆高度（yuan1内部，更小）
+            const centerX = yuan1Rect.left + yuan1Rect.width / 2;
+            const centerY = yuan1Rect.top + yuan1Rect.height / 2;
+
+            // 更新每个素材的位置
+            rawElements.forEach((item, index) => {
+                // 如果已经被填充到槽位，跳过
+                if (filledSlots.includes(item.id) || item.el.classList.contains('filled')) {
+                    return;
+                }
+
+                // 如果正在隐藏等待重生，跳过位置更新
+                if (item.el.classList.contains('hidden')) {
+                    return;
+                }
+
+                // 计算当前角度（基于时间和偏移）
+                const elapsed = timestamp - animationStartTime;
+                const angle = ((elapsed / orbitPeriod) * 360 + item.angleOffset) % 360;
+
+                // 将角度转换为弧度
+                const radian = (angle * Math.PI) / 180;
+
+                // 计算椭圆上的位置
+                const x = centerX + (orbitWidth / 2) * Math.cos(radian);
+                const y = centerY + (orbitHeight / 2) * Math.sin(radian);
+
+                // 设置元素位置
+                item.el.style.left = (x - 32.5) + 'px'; // 32.5是元素宽度的一半(65px/2)
+                item.el.style.top = (y - 32.5) + 'px'; // 32.5是元素高度的一半(65px/2)
+
+                // 边缘检测：当元素到达椭圆边缘（接近yuan1边缘）时隐藏
+                const normalizedAngle = angle % 360;
+                const isAtEdge = (normalizedAngle < 15 || normalizedAngle > 345 ||
+                                  (normalizedAngle > 165 && normalizedAngle < 195));
+
+                if (isAtEdge && !item.el.classList.contains('hidden')) {
+                    // 淡出隐藏元素
+                    item.el.classList.add('hidden');
+
+                    // 2秒后在起点重新显示
+                    setTimeout(() => {
+                        if (!animationRunning) return;
+
+                        // 重置到轨道起点
+                        const startRadian = (item.angleOffset * Math.PI) / 180;
+                        const startX = centerX + (orbitWidth / 2) * Math.cos(startRadian);
+                        const startY = centerY + (orbitHeight / 2) * Math.sin(startRadian);
+
+                        item.el.style.left = (startX - 32.5) + 'px';
+                        item.el.style.top = (startY - 32.5) + 'px';
+                        item.el.classList.remove('hidden');
+                    }, respawnDelay);
+                }
+            });
+
+            // 继续动画循环
+            requestAnimationFrame(updateOrbitalPositions);
+        }
+
+        // 点击原料填充槽位
+        rawElements.forEach(item => {
+            item.el.addEventListener('click', function() {
+                // 如果已经填充或动画未运行，不响应
+                if (filledSlots.includes(item.id) || !animationRunning) {
+                    return;
+                }
+
+                // 如果槽位已满，不响应
+                if (filledSlots.length >= 3) {
+                    return;
+                }
+
+                // 添加到槽位
+                filledSlots.push(item.id);
+
+                // 标记为已填充状态并立即隐藏
+                item.el.classList.add('filled');
+                item.el.style.display = 'none';
+
+                // 更新对应槽位的图片
+                const slotIndex = filledSlots.length - 1;
+                slotImages[slotIndex].src = item.el.src;
+
+                // 检查是否三个槽位都已填满
+                if (filledSlots.length === 3) {
+                    // 启用合成按钮
+                    btnHecheng.classList.remove('disabled');
+                }
+            });
+        });
+
+        // 合成按钮点击事件
+        btnHecheng.addEventListener('click', function() {
+            // 如果按钮被禁用，不响应
+            if (btnHecheng.classList.contains('disabled')) {
+                return;
+            }
+
+            // 构建配方键
+            const recipeKey = filledSlots.join('+');
+
+            // 检查是否匹配配方
+            const videoName = recipes[recipeKey];
+
+            if (videoName) {
+                // 匹配成功
+                // 显示成功提示
+                tipSuccess.classList.add('show');
+
+                // 1秒后隐藏提示并播放视频
+                setTimeout(() => {
+                    tipSuccess.classList.remove('show');
+                    tipSuccess.classList.add('hide');
+
+                    // 设置视频源并播放
+                    resultVideo.src = `${videoName}.mp4`;
+                    videoContainer.classList.add('show');
+                    resultVideo.play();
+                }, 1000);
+
+                // 1.5秒后完全移除提示动画类
+                setTimeout(() => {
+                    tipSuccess.classList.remove('hide');
+                }, 1500);
+            } else {
+                // 匹配失败
+                // 显示失败提示
+                tipFail.classList.add('show');
+
+                // 1.5秒后隐藏提示
+                setTimeout(() => {
+                    tipFail.classList.remove('show');
+                    tipFail.classList.add('hide');
+
+                    // 重置合成状态
+                    resetSynthesisState();
+                }, 1500);
+
+                // 2秒后完全移除提示动画类
+                setTimeout(() => {
+                    tipFail.classList.remove('hide');
+                }, 2000);
+            }
+        });
+
+        // 重置合成状态
+        function resetSynthesisState() {
+            // 清空槽位
+            filledSlots = [];
+
+            // 重置槽位图片
+            slotImages.forEach((slot, index) => {
+                slot.src = `slot${index + 1}.png`;
+            });
+
+            // 禁用合成按钮
+            btnHecheng.classList.add('disabled');
+
+            // 重置所有原料状态
+            rawElements.forEach(item => {
+                item.el.classList.remove('filled', 'hidden');
+                item.el.style.display = 'block';
+            });
+
+            // 隐藏视频容器
+            videoContainer.classList.remove('show');
+            resultVideo.src = '';
+
+            // 隐藏提示图片
+            tipSuccess.classList.remove('show', 'hide');
+            tipFail.classList.remove('show', 'hide');
+        }
+
+        // 视频播放结束回调函数
+        function videoEnded() {
+            // 隐藏视频容器
+            videoContainer.classList.remove('show');
+            resultVideo.src = '';
+
+            // 重置合成状态
+            resetSynthesisState();
+
+            // 切换到场景3
+            body.classList.remove('scene2');
+            body.classList.add('scene3');
+
+            // 显示disan.png并播放摇晃动画
+            disan.classList.remove('hide');
+            disan.classList.add('show');
+
+            // 动画播放4次后（每次0.5秒，共2秒），隐藏disan.png
+            setTimeout(() => {
+                disan.classList.remove('show');
+                disan.classList.add('hide');
+
+                // disan.png消失后，显示xiaomie.png和btn_hecheng
+                xiaomie.classList.add('show');
+                btnHechengScene3.classList.add('show');
+            }, 2000);
+        }
+
+        // 场景3：点击xiaomie.png显示qunzi.png
+        xiaomie.addEventListener('click', function() {
+            if (!xiaomie.classList.contains('show')) {
+                return;
+            }
+
+            // 显示qunzi.png
+            qunzi.classList.add('show');
+        });
+
+        // 场景3：点击btn_hecheng
+        btnHechengScene3.addEventListener('click', function() {
+            if (!btnHechengScene3.classList.contains('show')) {
+                return;
+            }
+
+            // 让xiaomie和btn_hecheng消失
+            xiaomie.classList.remove('show');
+            btnHechengScene3.classList.remove('show');
+
+            // 把qunzi放大居中显示
+            qunzi.classList.add('show');
+            qunzi.style.width = '40%';
+            qunzi.style.top = '50%';
+            qunzi.style.transform = 'translate(-50%, -50%)';
+            
+            // 开始细菌游戏
+            startJunGame();
+        });
+
+        // 开始细菌游戏
+        function startJunGame() {
+            junClickCount = 0;
+            junGameRunning = true;
+            
+            // 隐藏所有细菌
+            junImages.forEach(jun => {
+                jun.classList.remove('show', 'hide');
+                jun.style.display = 'none';
+            });
+            
+            // 开始生成细菌（固定间隔）
+            spawnJun();
+            junSpawnInterval = setInterval(spawnJun, 800);
+        }
+
+        // 生成细菌
+        function spawnJun() {
+            if (!junGameRunning) return;
+            
+            // 获取qunzi的位置和尺寸
+            const qunziRect = qunzi.getBoundingClientRect();
+            if (qunziRect.width === 0 || qunziRect.height === 0) return;
+            
+            // 检查当前显示的细菌数量
+            const visibleJuns = junImages.filter(jun => jun.classList.contains('show'));
+            
+            // 如果已经显示了3个细菌，不生成新的（等待点击消失）
+            if (visibleJuns.length >= 3) {
+                return;
+            }
+            
+            // 随机选择一个未显示且不在隐藏过程中的细菌
+            const availableJuns = junImages.filter(jun => !jun.classList.contains('show') && !jun.classList.contains('hide'));
+            if (availableJuns.length === 0) return;
+            
+            const randomJun = availableJuns[Math.floor(Math.random() * availableJuns.length)];
+            
+            // 获取细菌实际显示尺寸（基于CSS的8%宽度）
+            const junDisplayWidth = qunziRect.width * 0.08;
+            const junDisplayHeight = junDisplayWidth;
+            
+            // 确保细菌完全在qunzi范围内
+            const maxX = qunziRect.width - junDisplayWidth;
+            const maxY = qunziRect.height - junDisplayHeight;
+            
+            const safeMaxX = Math.max(0, maxX);
+            const safeMaxY = Math.max(0, maxY);
+            
+            const randomX = Math.random() * safeMaxX;
+            const randomY = Math.random() * safeMaxY;
+            
+            // 设置位置
+            randomJun.style.left = (qunziRect.left + randomX) + 'px';
+            randomJun.style.top = (qunziRect.top + randomY) + 'px';
+            randomJun.style.width = junDisplayWidth + 'px';
+            randomJun.style.height = 'auto';
+            randomJun.style.display = 'block';
+            
+            // 显示细菌
+            setTimeout(() => {
+                if (junGameRunning) {
+                    randomJun.classList.add('show');
+                }
+            }, 50);
+        }
+
+        // 隐藏细菌
+        function hideJun(jun) {
+            jun.classList.remove('show');
+            jun.classList.add('hide');
+            
+            setTimeout(() => {
+                jun.classList.remove('hide');
+                jun.style.display = 'none';
+            }, 500);
+        }
+
+        // 细菌点击事件
+        junImages.forEach(jun => {
+            jun.addEventListener('click', function() {
+                if (!jun.classList.contains('show') || !junGameRunning) {
+                    return;
+                }
+                
+                // 增加计数
+                junClickCount++;
+                
+                // 隐藏被点击的细菌
+                hideJun(jun);
+                
+                // 检查是否达到目标
+                if (junClickCount >= JUN_TARGET) {
+                    winJunGame();
+                }
+            });
+        });
+
+        // 通关细菌游戏
+        function winJunGame() {
+            junGameRunning = false;
+            
+            // 停止生成细菌
+            if (junSpawnInterval) {
+                clearInterval(junSpawnInterval);
+                junSpawnInterval = null;
+            }
+            
+            // 隐藏所有细菌
+            junImages.forEach(jun => {
+                jun.classList.remove('show', 'hide');
+                jun.style.display = 'none';
+            });
+            
+            // 显示通关效果
+            gj.classList.add('show');
+            
+            // 2秒后跳转到原始背景
+            setTimeout(() => {
+                // 隐藏所有场景3元素
+                qunzi.classList.remove('show');
+                gj.classList.remove('show');
+                
+                // 切换回原始背景
+                body.classList.remove('scene2', 'scene3');
+                body.style.backgroundImage = 'url("d31676867063b01290c8d278c2fcd95.jpg")';
+                
+                // 显示hai.png
+                const hai = document.createElement('img');
+                hai.src = 'hai.png';
+                hai.style.position = 'fixed';
+                hai.style.top = '65%';
+                hai.style.left = '25%';
+                hai.style.transform = 'translateY(-50%)';
+                hai.style.width = '20%';
+                hai.style.zIndex = '100';
+                hai.style.animation = 'fadeIn 0.5s ease-out';
+                document.body.appendChild(hai);
+                
+                // 创建对话框
+                const dialog = document.createElement('div');
+                dialog.innerHTML = '<p>谢谢你帮我洗干净了衣服，香香的我很喜欢</p>';
+                dialog.style.position = 'fixed';
+                dialog.style.top = '40%';
+                dialog.style.left = '38%';
+                dialog.style.background = 'white';
+                dialog.style.borderRadius = '16px';
+                dialog.style.padding = '16px 24px';
+                dialog.style.boxShadow = '0 4px 15px rgba(0, 0, 0, 0.2)';
+                dialog.style.zIndex = '101';
+                dialog.style.maxWidth = '280px';
+                dialog.style.animation = 'fadeIn 0.5s ease-out 0.3s both';
+                dialog.style.fontFamily = "'Microsoft YaHei', sans-serif";
+                dialog.style.fontSize = '16px';
+                dialog.style.color = '#333';
+                dialog.style.lineHeight = '1.6';
+                dialog.style.display = 'flex';
+                dialog.style.flexDirection = 'column';
+                dialog.style.alignItems = 'flex-end';
+                
+                // 添加对话框尾巴
+                const tail = document.createElement('div');
+                tail.style.position = 'absolute';
+                tail.style.bottom = '-20px';
+                tail.style.left = '80px';
+                tail.style.border = '10px solid transparent';
+                tail.style.borderTopColor = 'white';
+                dialog.appendChild(tail);
+                
+                // 添加再来一次按钮
+                const laiBtn = document.createElement('img');
+                laiBtn.src = 'lai.png';
+                laiBtn.style.width = '60px';
+                laiBtn.style.height = 'auto';
+                laiBtn.style.marginTop = '12px';
+                laiBtn.style.cursor = 'pointer';
+                laiBtn.style.transition = 'transform 0.2s ease';
+                laiBtn.style.alignSelf = 'flex-end';
+                laiBtn.addEventListener('click', function() {
+                    // 重新加载页面回到初始状态
+                    window.location.reload();
+                });
+                laiBtn.addEventListener('mouseover', function() {
+                    laiBtn.style.transform = 'scale(1.05)';
+                });
+                laiBtn.addEventListener('mouseout', function() {
+                    laiBtn.style.transform = 'scale(1)';
+                });
+                dialog.appendChild(laiBtn);
+                
+                document.body.appendChild(dialog);
+            }, 2000);
+        }
+    </script>
+</body>
+</html>
